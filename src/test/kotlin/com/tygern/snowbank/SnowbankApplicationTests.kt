@@ -21,10 +21,10 @@ import org.springframework.web.context.WebApplicationContext
 @WebAppConfiguration
 class SnowbankApplicationTests {
 
-    var mockMvc: MockMvc? = null
-
     @Autowired
-    val context: WebApplicationContext? = null
+    lateinit var context: WebApplicationContext
+
+    lateinit var mockMvc: MockMvc
 
     @Before
     fun setUp() {
@@ -33,12 +33,11 @@ class SnowbankApplicationTests {
 
     @Test
     fun getFlakes() {
-        mockMvc!!
+        mockMvc
                 .perform(get("/flakes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize<Any>(2)))
                 .andExpect(jsonPath("$[0].numberOfPoints", `is`(6)))
                 .andExpect(jsonPath("$[1].numberOfPoints", `is`(5)))
     }
-
 }
