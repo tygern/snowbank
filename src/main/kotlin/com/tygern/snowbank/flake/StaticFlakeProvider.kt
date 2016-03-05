@@ -1,4 +1,4 @@
-package com.tygern.snowbank
+package com.tygern.snowbank.flake
 
 class StaticFlakeProvider : FlakeProvider {
     override fun getFlakes(): Array<Flake> {
