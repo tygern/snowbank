@@ -38,6 +38,8 @@ class SnowbankApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize<Any>(2)))
                 .andExpect(jsonPath("$[0].numberOfPoints", `is`(6)))
+                .andExpect(jsonPath("$[0].pointy", `is`(true)))
                 .andExpect(jsonPath("$[1].numberOfPoints", `is`(5)))
+                .andExpect(jsonPath("$[1].pointy", `is`(false)))
     }
 }
