@@ -1,33 +1,40 @@
 package com.tygern.snowbank
 
-import com.github.kittinunf.fuel.httpGet
-import org.hamcrest.Matchers.equalTo
-import org.junit.Assert.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.SpringApplicationConfiguration
-import org.springframework.boot.test.WebIntegrationTest
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
 
 @RunWith(SpringJUnit4ClassRunner::class)
 @SpringApplicationConfiguration(classes = arrayOf(SnowbankApplication::class))
-@WebIntegrationTest(randomPort = true)
-class SnowbankApplicationTests @Autowired
-constructor() {
+@WebAppConfiguration
+class SnowbankApplicationTests {
 
-    @Value("\${local.server.port}")
-    val port: Int? = null;
+    var mockMvc: MockMvc? = null
+
+    @Autowired
+    val context: WebApplicationContext? = null
+
+    @Before
+    fun setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
     @Test
     fun getFlakes() {
-        val data = "http://localhost:$port/flakes"
-                .httpGet()
-                .responseString()
-                .third
-
-        assertThat(data, equalTo("[{\"numberOfPoints\":6},{\"numberOfPoints\":5}]"))
+        mockMvc!!
+                .perform(get("/flakes"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[{\"numberOfPoints\":6},{\"numberOfPoints\":5}]"))
     }
 
 }
