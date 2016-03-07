@@ -7,6 +7,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -19,6 +21,10 @@ import org.springframework.web.context.WebApplicationContext
 @RunWith(SpringJUnit4ClassRunner::class)
 @SpringApplicationConfiguration(classes = arrayOf(SnowbankApplication::class))
 @WebAppConfiguration
+@SqlGroup(
+        Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = arrayOf("classpath:dbSetup.sql")),
+        Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = arrayOf("classpath:dbTeardown.sql"))
+)
 class SnowbankApplicationTests {
 
     @Autowired
@@ -35,10 +41,12 @@ class SnowbankApplicationTests {
     fun getFlakes() {
         mockMvc
                 .perform(get("/flakes"))
-                .andExpect(status().isOk())
+                .andExpect(status().isOk)
                 .andExpect(jsonPath("$", hasSize<Any>(2)))
+                .andExpect(jsonPath("$[0].id", `is`(1)))
                 .andExpect(jsonPath("$[0].numberOfPoints", `is`(6)))
                 .andExpect(jsonPath("$[0].pointy", `is`(true)))
+                .andExpect(jsonPath("$[1].id", `is`(2)))
                 .andExpect(jsonPath("$[1].numberOfPoints", `is`(5)))
                 .andExpect(jsonPath("$[1].pointy", `is`(false)))
     }

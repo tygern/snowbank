@@ -7,8 +7,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
     }
 }
 
@@ -26,13 +26,20 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+
+    compile 'postgresql:postgresql:9.1-901-1.jdbc4'
+    compile 'org.flywaydb:flyway-core:4.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'com.jayway.jsonpath:json-path:2.2.0'
+    testCompile 'com.nhaarman:mockito-kotlin:0.2.1'
 }
 
 task wrapper(type: Wrapper) {
