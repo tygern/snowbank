@@ -1,5 +1,6 @@
 package com.tygern.snowbank
 
+import com.tygern.snowbank.flake.FlakeProvider
 import com.tygern.snowbank.flake.staticsource.StaticFlakeProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -9,5 +10,6 @@ import org.springframework.context.annotation.Profile
 @Configuration
 open class StaticContext {
     @Bean
-    open fun flakeProvider() = StaticFlakeProvider()
+    open fun flakeProvider(): FlakeProvider
+            = StaticFlakeProvider()
 }
