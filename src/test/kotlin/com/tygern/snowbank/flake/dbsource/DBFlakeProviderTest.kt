@@ -58,4 +58,21 @@ class DBFlakeProviderTest {
 
         verify(flakeRepository).delete(7)
     }
+
+    @Test
+    fun testupdate() {
+        val flakeToSave = Flake(id = null, numberOfPoints = 15, pointy = true)
+        val flakeEntity = FlakeEntity(id = 7, numberOfPoints = 15, pointy = true)
+
+        val savedFlake = Flake(id = 7, numberOfPoints = 15, pointy = true)
+        val savedFlakeEntity = FlakeEntity(id = 7, numberOfPoints = 15, pointy = true)
+
+        whenever(flakeRepository.save(flakeEntity)).thenReturn(savedFlakeEntity)
+
+        var result = flakeProvider.update(7, flakeToSave)
+
+        assertThat(result, equalTo(savedFlake))
+
+        verify(flakeRepository).save(flakeEntity)
+    }
 }

@@ -73,6 +73,26 @@ class FlakeApiTests {
     }
 
     @Test
+    fun testupdateFlake() {
+        mockMvc
+                .perform(put("/flakes/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"numberOfPoints\": 33, \"pointy\": false}"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id", `is`(1)))
+                .andExpect(jsonPath("$.numberOfPoints", `is`(33)))
+                .andExpect(jsonPath("$.pointy", `is`(false)))
+
+        mockMvc
+                .perform(get("/flakes"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$", hasSize<Any>(2)))
+                .andExpect(jsonPath("$[1].id", `is`(1)))
+                .andExpect(jsonPath("$[1].numberOfPoints", `is`(33)))
+                .andExpect(jsonPath("$[1].pointy", `is`(false)))
+    }
+
+    @Test
     fun testdeleteFlake() {
         mockMvc
                 .perform(delete("/flakes/1"))

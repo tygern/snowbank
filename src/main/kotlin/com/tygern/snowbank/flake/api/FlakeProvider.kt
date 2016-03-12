@@ -6,4 +6,6 @@ interface FlakeProvider {
     fun create(flake: Flake): Flake
 
     fun delete(id: Int)
+
+    fun update(id: Int, flake: Flake): Flake
 }

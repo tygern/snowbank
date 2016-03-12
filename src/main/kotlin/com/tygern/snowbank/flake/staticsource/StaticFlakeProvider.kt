@@ -5,6 +5,8 @@ import com.tygern.snowbank.flake.api.FlakeProvider
 import java.util.*
 
 class StaticFlakeProvider : FlakeProvider {
+    override fun update(id: Int, flake: Flake): Flake = flake
+
     override fun delete(id: Int) {
     }
 
