@@ -1,6 +1,6 @@
 package com.tygern.snowbank
 
-import com.tygern.snowbank.flake.FlakeProvider
+import com.tygern.snowbank.flake.api.FlakeProvider
 import com.tygern.snowbank.flake.dbsource.DBFlakeProvider
 import com.tygern.snowbank.flake.dbsource.FlakeRepository
 import org.springframework.context.annotation.Bean
