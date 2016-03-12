@@ -12,7 +12,7 @@ class StaticFlakeProvider : FlakeProvider {
 
     override fun create(flake: Flake): Flake = flake
 
-    override fun getFlakes(): List<Flake> = Arrays.asList(
+    override fun getList(): List<Flake> = Arrays.asList(
             Flake(id = 1, numberOfPoints = 6, pointy = true),
             Flake(id = 2, numberOfPoints = 5, pointy = false)
     )

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 class FlakeController @Autowired constructor(val flakeProvider: FlakeProvider)  {
 
     @RequestMapping(method = arrayOf(RequestMethod.GET))
-    fun getList() = flakeProvider.getFlakes()
+    fun getList() = flakeProvider.getList()
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = arrayOf(RequestMethod.POST))

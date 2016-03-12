@@ -16,7 +16,7 @@ constructor(private val flakeRepository: FlakeRepository) : FlakeProvider {
 
     override fun create(flake: Flake): Flake = save(flake)
 
-    override fun getFlakes(): List<Flake> = flakeRepository
+    override fun getList(): List<Flake> = flakeRepository
             .findAll()
             .map({ toFlake(it) })
 

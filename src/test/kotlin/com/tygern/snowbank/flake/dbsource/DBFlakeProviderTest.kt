@@ -23,13 +23,13 @@ class DBFlakeProviderTest {
     }
 
     @Test
-    fun testgetFlakes() {
+    fun testgetList() {
         val flake = Flake(id = 7, numberOfPoints = 15, pointy = true)
         val flakeEntity = FlakeEntity(id = 7, numberOfPoints = 15, pointy = true)
 
         whenever(flakeRepository.findAll()).thenReturn(Arrays.asList(flakeEntity))
 
-        var result = flakeProvider.getFlakes()
+        var result = flakeProvider.getList()
 
         assertThat(result.size, equalTo(1))
         assertThat(result[0], equalTo(flake))
