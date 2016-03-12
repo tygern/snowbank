@@ -13,8 +13,7 @@ import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -40,7 +39,7 @@ class FlakeApiTests {
     }
 
     @Test
-    fun getFlakes() {
+    fun testgetFlakes() {
         mockMvc
                 .perform(get("/flakes"))
                 .andExpect(status().isOk)
@@ -54,7 +53,7 @@ class FlakeApiTests {
     }
 
     @Test
-    fun createFlake() {
+    fun testcreateFlake() {
         mockMvc
                 .perform(post("/flakes")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,5 +70,20 @@ class FlakeApiTests {
                 .andExpect(jsonPath("$[2].id", `is`(3)))
                 .andExpect(jsonPath("$[2].numberOfPoints", `is`(14)))
                 .andExpect(jsonPath("$[2].pointy", `is`(false)))
+    }
+
+    @Test
+    fun testdeleteFlake() {
+        mockMvc
+                .perform(delete("/flakes/1"))
+                .andExpect(status().isNoContent)
+
+        mockMvc
+                .perform(get("/flakes"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$", hasSize<Any>(1)))
+                .andExpect(jsonPath("$[0].id", `is`(2)))
+                .andExpect(jsonPath("$[0].numberOfPoints", `is`(5)))
+                .andExpect(jsonPath("$[0].pointy", `is`(false)))
     }
 }

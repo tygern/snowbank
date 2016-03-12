@@ -23,7 +23,7 @@ class DBFlakeProviderTest {
     }
 
     @Test
-    fun testGetFlakes() {
+    fun testgetFlakes() {
         val flake = Flake(id = 7, numberOfPoints = 15, pointy = true)
         val flakeEntity = FlakeEntity(id = 7, numberOfPoints = 15, pointy = true)
 
@@ -36,7 +36,7 @@ class DBFlakeProviderTest {
     }
 
     @Test
-    fun testCreate() {
+    fun testcreate() {
         val flakeToSave = Flake(id = null, numberOfPoints = 15, pointy = true)
         val flakeEntity = FlakeEntity(id = null, numberOfPoints = 15, pointy = true)
 
@@ -50,5 +50,12 @@ class DBFlakeProviderTest {
         assertThat(result, equalTo(savedFlake))
 
         verify(flakeRepository).save(flakeEntity)
+    }
+
+    @Test
+    fun testdelete() {
+        flakeProvider.delete(7)
+
+        verify(flakeRepository).delete(7)
     }
 }

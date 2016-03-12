@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 
 class DBFlakeProvider @Autowired
 constructor(private val flakeRepository: FlakeRepository) : FlakeProvider {
+    override fun delete(id: Int) = flakeRepository.delete(id)
+
     override fun create(flake: Flake): Flake {
         val entityToSave = toEntity(flake)
 
