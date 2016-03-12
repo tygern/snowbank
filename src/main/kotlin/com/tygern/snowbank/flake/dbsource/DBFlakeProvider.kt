@@ -19,13 +19,13 @@ constructor(private val flakeRepository: FlakeRepository) : FlakeProvider {
             .map({ toFlake(it) })
 
     private fun toFlake(entity: FlakeEntity) = Flake(
-            id = entity.id.toInt(),
+            id = entity.id,
             numberOfPoints = entity.numberOfPoints.toInt(),
             pointy = entity.pointy
     )
 
     private fun toEntity(flake: Flake) = FlakeEntity(
-            id = flake.id.toInt(),
+            id = flake.id,
             numberOfPoints = flake.numberOfPoints.toInt(),
             pointy = flake.pointy
     )

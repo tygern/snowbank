@@ -14,7 +14,7 @@ data class FlakeEntity(
                 allocationSize = 1)
         @GeneratedValue(strategy = javax.persistence.GenerationType.SEQUENCE,
                 generator = "flake_entity_id_seq")
-        var id: Int = 0,
+        var id: Int? = null,
         var numberOfPoints: Int = 0,
         var pointy: Boolean = false
 )

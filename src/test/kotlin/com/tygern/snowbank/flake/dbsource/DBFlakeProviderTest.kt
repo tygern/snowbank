@@ -37,8 +37,8 @@ class DBFlakeProviderTest {
 
     @Test
     fun testCreate() {
-        val flakeToSave = Flake(numberOfPoints = 15, pointy = true)
-        val flakeEntity = FlakeEntity(numberOfPoints = 15, pointy = true)
+        val flakeToSave = Flake(id = null, numberOfPoints = 15, pointy = true)
+        val flakeEntity = FlakeEntity(id = null, numberOfPoints = 15, pointy = true)
 
         val savedFlake = Flake(id = 7, numberOfPoints = 15, pointy = true)
         val savedFlakeEntity = FlakeEntity(id = 7, numberOfPoints = 15, pointy = true)
