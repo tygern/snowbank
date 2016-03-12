@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 
 class DBFlakeProvider @Autowired
 constructor(private val flakeRepository: FlakeRepository) : FlakeProvider {
+    override fun get(id: Int): Flake = toFlake(flakeRepository.findOne(id))
+
     override fun update(id: Int, flake: Flake): Flake {
         flake.id = id
 

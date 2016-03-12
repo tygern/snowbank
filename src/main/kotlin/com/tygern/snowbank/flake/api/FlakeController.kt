@@ -18,6 +18,9 @@ class FlakeController @Autowired constructor(val flakeProvider: FlakeProvider)  
     @RequestMapping("{id}", method = arrayOf(RequestMethod.PUT))
     fun update(@PathVariable id: Int, @RequestBody flake: Flake) = flakeProvider.update(id, flake)
 
+    @RequestMapping("{id}", method = arrayOf(RequestMethod.GET))
+    fun get(@PathVariable id: Int) = flakeProvider.get(id)
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping("{id}", method = arrayOf(RequestMethod.DELETE))
     fun delete(@PathVariable id: Int) = flakeProvider.delete(id)

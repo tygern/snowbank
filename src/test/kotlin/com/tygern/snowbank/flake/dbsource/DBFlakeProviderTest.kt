@@ -75,4 +75,16 @@ class DBFlakeProviderTest {
 
         verify(flakeRepository).save(flakeEntity)
     }
+
+    @Test
+    fun testget() {
+        val flake = Flake(id = 7, numberOfPoints = 15, pointy = true)
+        val flakeEntity = FlakeEntity(id = 7, numberOfPoints = 15, pointy = true)
+
+        whenever(flakeRepository.findOne(7)).thenReturn(flakeEntity)
+
+        var result = flakeProvider.get(7)
+
+        assertThat(result, equalTo(flake))
+    }
 }

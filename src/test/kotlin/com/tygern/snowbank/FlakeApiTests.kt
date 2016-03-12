@@ -39,7 +39,7 @@ class FlakeApiTests {
     }
 
     @Test
-    fun testgetFlakes() {
+    fun testgetList() {
         mockMvc
                 .perform(get("/flakes"))
                 .andExpect(status().isOk)
@@ -50,6 +50,16 @@ class FlakeApiTests {
                 .andExpect(jsonPath("$[1].id", `is`(2)))
                 .andExpect(jsonPath("$[1].numberOfPoints", `is`(5)))
                 .andExpect(jsonPath("$[1].pointy", `is`(false)))
+    }
+
+    @Test
+    fun testget() {
+        mockMvc
+                .perform(get("/flakes/1"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id", `is`(1)))
+                .andExpect(jsonPath("$.numberOfPoints", `is`(6)))
+                .andExpect(jsonPath("$.pointy", `is`(true)))
     }
 
     @Test
