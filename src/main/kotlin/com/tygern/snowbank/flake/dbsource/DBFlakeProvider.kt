@@ -23,22 +23,10 @@ constructor(private val flakeRepository: FlakeRepository) : FlakeProvider {
             .map({ toFlake(it) })
 
     private fun save(flake: Flake): Flake {
-        val entityToSave = toEntity(flake)
+        val entityToSave = toFlakeEntity(flake)
 
         val savedEntity = flakeRepository.save(entityToSave)
 
         return toFlake(savedEntity)
     }
-
-    private fun toFlake(entity: FlakeEntity) = Flake(
-            id = entity.id,
-            numberOfPoints = entity.numberOfPoints.toInt(),
-            pointy = entity.pointy
-    )
-
-    private fun toEntity(flake: Flake) = FlakeEntity(
-            id = flake.id,
-            numberOfPoints = flake.numberOfPoints.toInt(),
-            pointy = flake.pointy
-    )
 }
