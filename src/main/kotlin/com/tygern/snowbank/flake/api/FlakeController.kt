@@ -2,6 +2,9 @@ package com.tygern.snowbank.flake.api
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NOT_FOUND
+import org.springframework.http.HttpStatus.OK
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/flakes")
@@ -19,7 +22,14 @@ class FlakeController @Autowired constructor(val flakeProvider: FlakeProvider)  
     fun update(@PathVariable id: Int, @RequestBody flake: Flake) = flakeProvider.update(id, flake)
 
     @RequestMapping("{id}", method = arrayOf(RequestMethod.GET))
-    fun get(@PathVariable id: Int) = flakeProvider.get(id)
+    fun get(@PathVariable id: Int): ResponseEntity<Flake?> {
+        var flake = flakeProvider.get(id)
+
+        val statusCode = if (flake == null) NOT_FOUND else OK
+
+        return ResponseEntity(flake, statusCode)
+    }
+
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping("{id}", method = arrayOf(RequestMethod.DELETE))

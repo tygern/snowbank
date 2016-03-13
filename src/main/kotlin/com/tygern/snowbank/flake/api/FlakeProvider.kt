@@ -9,5 +9,5 @@ interface FlakeProvider {
 
     fun update(id: Int, flake: Flake): Flake
 
-    fun get(id: Int): Flake
+    fun get(id: Int): Flake?
 }
