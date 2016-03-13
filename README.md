@@ -1,5 +1,7 @@
 # Snowbank
 
+![snowbank](images/snowbank.jpg)
+
 A starter app using [Spring Boot](http://projects.spring.io/spring-boot/) writtin in [Kotlin](https://kotlinlang.org/).
 
 ## Setup
