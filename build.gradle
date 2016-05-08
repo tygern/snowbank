@@ -26,6 +26,5 @@ subprojects {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        testCompile "io.damo.kspec:kspec-spring:$kSpecVersion"
     }
 }

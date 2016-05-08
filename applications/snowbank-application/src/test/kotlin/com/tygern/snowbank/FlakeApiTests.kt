@@ -1,66 +1,92 @@
 package com.tygern.snowbank
 
-import org.hamcrest.Matchers.`is`
+import com.jayway.jsonpath.JsonPath
+import io.damo.kspec.Spec
+import io.damo.kspec.spring.SpringSpecTreeRunner
+import io.damo.kspec.spring.injectValue
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
-import org.junit.Test
-import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.junit.Assert.assertThat
+import org.junit.runner.RunWith
+import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.boot.test.WebIntegrationTest
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.test.context.jdbc.SqlGroup
 
-class FlakeApiTests : FlakeApiTestCase() {
-    @Test
-    fun testcreateFlake() {
-        mockMvc
-                .perform(post("/flakes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"numberOfPoints\": 14, \"pointy\": false}"))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.id", `is`(3)))
-                .andExpect(jsonPath("$.numberOfPoints", `is`(14)))
-                .andExpect(jsonPath("$.pointy", `is`(false)))
+@RunWith(SpringSpecTreeRunner::class)
+@SpringApplicationConfiguration(SnowbankApplication::class)
+@WebIntegrationTest("server.port:0")
+@SqlGroup(
+        Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = arrayOf("classpath:dbSetup.sql")),
+        Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = arrayOf("classpath:dbTeardown.sql"))
+)
+class FlakeApiTests : Spec({
 
-        mockMvc
-                .perform(get("/flakes"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$", hasSize<Any>(3)))
-                .andExpect(jsonPath("$[2].id", `is`(3)))
-                .andExpect(jsonPath("$[2].numberOfPoints", `is`(14)))
-                .andExpect(jsonPath("$[2].pointy", `is`(false)))
+    val port = injectValue("local.server.port", Int::class)
+    val JSON = MediaType.parse("application/json; charset=utf-8");
+    val client = OkHttpClient()
+
+    test("POST /flakes") {
+        var requestBody = "{\"numberOfPoints\": 14, \"pointy\": false}"
+        var body = RequestBody.create(JSON, requestBody);
+
+        val request = Request.Builder()
+                .post(body)
+                .url("http://localhost:$port/flakes")
+                .build()
+
+        val response = client.newCall(request).execute()
+
+        assertThat(response.code(), equalTo(201));
+
+        val json = JsonPath.parse(response.body().string());
+
+        assertThat(json.read<Int>("$.id"), equalTo(3))
+        assertThat(json.read<Int>("$.numberOfPoints"), equalTo(14))
+        assertThat(json.read<Boolean>("$.pointy"), equalTo(false))
     }
 
-    @Test
-    fun testupdateFlake() {
-        mockMvc
-                .perform(put("/flakes/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"numberOfPoints\": 33, \"pointy\": false}"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.id", `is`(1)))
-                .andExpect(jsonPath("$.numberOfPoints", `is`(33)))
-                .andExpect(jsonPath("$.pointy", `is`(false)))
+    test("PUT /flakes/id") {
+        var requestBody = "{\"numberOfPoints\": 33, \"pointy\": false}"
+        var body = RequestBody.create(JSON, requestBody);
 
-        mockMvc
-                .perform(get("/flakes"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$", hasSize<Any>(2)))
-                .andExpect(jsonPath("$[1].id", `is`(1)))
-                .andExpect(jsonPath("$[1].numberOfPoints", `is`(33)))
-                .andExpect(jsonPath("$[1].pointy", `is`(false)))
+        val request = Request.Builder()
+                .put(body)
+                .url("http://localhost:$port/flakes/1")
+                .build()
+
+        val response = client.newCall(request).execute()
+
+        assertThat(response.code(), equalTo(200));
+
+        val json = JsonPath.parse(response.body().string());
+
+        assertThat(json.read<Int>("$.id"), equalTo(1))
+        assertThat(json.read<Int>("$.numberOfPoints"), equalTo(33))
+        assertThat(json.read<Boolean>("$.pointy"), equalTo(false))
     }
 
-    @Test
-    fun testdeleteFlake() {
-        mockMvc
-                .perform(delete("/flakes/1"))
-                .andExpect(status().isNoContent)
+    test("DELETE /flakes/id") {
+        val request = Request.Builder()
+                .delete()
+                .url("http://localhost:$port/flakes/1")
+                .build()
 
-        mockMvc
-                .perform(get("/flakes"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$", hasSize<Any>(1)))
-                .andExpect(jsonPath("$[0].id", `is`(2)))
-                .andExpect(jsonPath("$[0].numberOfPoints", `is`(5)))
-                .andExpect(jsonPath("$[0].pointy", `is`(false)))
+        val response = client.newCall(request).execute()
+
+        assertThat(response.code(), equalTo(204));
+
+        val getRequest = Request.Builder()
+                .url("http://localhost:$port/flakes")
+                .build()
+        val getResponse = client.newCall(getRequest).execute()
+
+        val json = JsonPath.parse(getResponse.body().string());
+        assertThat(json.read<List<Any>>("$"), hasSize<Any>(1))
+        assertThat(json.read<Int>("$[0].id"), equalTo(2))
     }
-}
+})

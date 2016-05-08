@@ -3,6 +3,7 @@ dependencies {
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
 
+    testCompile "io.damo.kspec:kspec:$kSpecVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
     testCompile 'com.nhaarman:mockito-kotlin:0.2.1'
 }
