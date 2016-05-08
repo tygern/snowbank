@@ -1,0 +1,15 @@
+dependencies {
+    compile project(":components/db-flake-source")
+    compile project(":components/static-flake-source")
+    compile project(":components/flake-provider")
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+
+    compile 'postgresql:postgresql:9.1-901-1.jdbc4'
+    compile 'org.flywaydb:flyway-core:4.0'
+
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile 'com.jayway.jsonpath:json-path:2.2.0'
+}
+
+apply plugin: 'spring-boot'

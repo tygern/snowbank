@@ -1,0 +1,8 @@
+dependencies {
+    compile project(":components/flake-provider")
+
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile 'com.nhaarman:mockito-kotlin:0.2.1'
+}
