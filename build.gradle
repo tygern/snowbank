@@ -2,6 +2,7 @@ buildscript {
     ext {
         springBootVersion = '1.3.2.RELEASE'
         kotlinVersion = '1.0.1'
+        kSpecVersion = '1.2.1'
     }
     repositories {
         mavenCentral()
@@ -11,7 +12,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
-
 
 subprojects {
     apply plugin: 'kotlin'
@@ -26,5 +26,6 @@ subprojects {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        testCompile "io.damo.kspec:kspec-spring:$kSpecVersion"
     }
 }
